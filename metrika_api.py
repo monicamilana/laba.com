@@ -48,20 +48,26 @@ class YandexMetrikaAPI:
 
 # Использование класса
 TOKEN = "y0__xCZ9I2JCBji4TYg0NLX3xIbJftfM1Kjiutcmdw8j2JdUBJGQA"
-COUNTER_ID = "100820749"
+COUNTER_ID = 100820749  # Убедись, что это число!
 
 api = YandexMetrikaAPI(TOKEN, COUNTER_ID)
 
-# Проверяем API перед выполнением
+# Получаем данные в формате JSON
 metrics = {
     "Визиты": api.get_visits(),
     "Просмотры": api.get_views(),
     "Посетители": api.get_visitors()
 }
 
-# Выводим результаты
+# Вывод JSON-ответа (полные данные)
+print("\n🔹 Полные данные от API (JSON):")
 for metric, value in metrics.items():
-    if value:
-        print(f"{metric}: {value}")
+    print(f"{metric}: {value}")
+
+# Вывод чистых значений (удобочитаемый формат)
+print("\n🔹 Чистые значения:")
+for metric, value in metrics.items():
+    if value and "data" in value and value["data"]:
+        print(f"{metric}: {value['data'][0]['metrics'][0]}")
     else:
         print(f"⚠ Данные {metric} недоступны.")
