@@ -48,7 +48,7 @@ class YandexMetrikaAPI:
 
 # Использование класса
 TOKEN = "y0__xCZ9I2JCBji4TYg0NLX3xIbJftfM1Kjiutcmdw8j2JdUBJGQA"
-COUNTER_ID = "bc7dc0ebdd4d40ce9df2047ef6257ec0"
+COUNTER_ID = "100820749"
 
 api = YandexMetrikaAPI(TOKEN, COUNTER_ID)
 
