@@ -24,7 +24,6 @@ for record in gc_sorted_records:
 from Bio import SeqIO
 
 # Файл GenBank
-#именно в следующей строчке у тебя должен быть путь к твоему файлу который ты делаешь на сайте, ну и наверное название у тебя будет другое
 input_file = r"C:/Users/USER/питон задания лаб/sequence.gb"
 
 # Читаем все записи
@@ -32,10 +31,10 @@ records = list(SeqIO.parse(input_file, "genbank"))
 
 # Обрабатываем кодирующие последовательности
 for record in records:
-    for feature in record.features:# Каждый feature — это аннотированный фрагмент последовательности, содержащий информацию о гене, кодирующем участке
+    for feature in record.features:# Каждый feature — это фрагмент последовательности, содержащий информацию о гене, кодирующем участке
         if feature.type == "CDS": #Проверяем, является ли данный feature кодирующей последовательностью (CDS — Coding DNA Sequence, то есть участок ДНК, который кодирует белок)
             start = feature.location.start  # Получаем координаты начала (start) и конца (end) кодирующего участка на последовательности. feature.location.start и .end содержат числовые позиции участка.
-            end = feature.location.end  # Убираем .position
+            end = feature.location.end 
             strand = feature.location.strand#Определяем направление цепи (1 — прямая цепь, -1 — комплементарная).
             
             protein_sequence = feature.qualifiers.get("translation", ["Нет данных"])[0]#Извлекаем аминокислотную последовательность белка, если она доступна в аннотациях (qualifiers). Если перевода нет, возвращается "Нет данных"
