@@ -1,0 +1,1566 @@
+#!/usr/bin/python3
+
+# Строки
+
+# Заполните код преведенных ниже функций. Функция main() уже настроена
+# для вызова функций с несколькими различными параметрами,
+# и выводит 'OK' в случае, если вызов функции корректен.
+# Начальный код каждой функции содержит 'return'
+# и является просто заготовкой для вашего кода.
+
+
+# A. Пончики
+# Дано количество пончиков (целое число);
+# Нужно вернуть строку следующего вида:
+# 'Количество пончиков: <count>', где <count> это количество,
+# переданное в функцию как параметр.
+# Однако, если количество 10 и более - нужно использовать слово
+# 'много', вместо текущего количества.
+# Таким образом, donuts(5) вернет 'Количество пончиков: 5'
+# а donuts(23) - 'Количество пончиков: много'
+
+def donuts(count):
+    return f'Количество пончиков: {"много" if count >= 10 else count}'
+
+
+
+# B. Оба конца
+# Дана строка s. 
+# Верните строку, состоящую из первых 2
+# и последних 2 символов исходной строки.
+# Таким образом, из строки 'spring' получится 'spng'. 
+# Однако, если длина строки меньше, чем 2 -
+# верните просто пустую строчку.
+
+def both_ends(s):
+    return s[:2] + s[-2:] if len(s) >= 2 else ''
+
+
+
+# C. Кроме первого
+# Дана строка s.
+# Верните строку, в которой все вхождения ее первого символа
+# заменены на '*', за исключением самого этого первого символа.
+# Т.е., из 'babble' получится 'ba**le'.
+# Предполагается, что длина строки 1 и более.
+# Подсказка: s.replace(stra, strb) вернет версию строки, 
+# в которой все вхождения stra будут заменены на strb.
+
+def fix_start(s):
+    return s[0] + s[1:].replace(s[0], '*')
+
+
+
+# D. Перемешивание
+# Даны строки a и b.
+# Верните одну строку, в которой a и b отделены пробелом '<a> <b>', 
+# и поменяйте местами первые 2 символа каждой строки.
+# Т.е.:
+#   'mix', 'pod' -> 'pox mid'
+#   'dog', 'dinner' -> 'dig donner'
+# Предполагается, что строки a и b имеют длину 2 и более символов.
+
+def mix_up(a, b):
+    return b[:2] + a[2:] + ' ' + a[:2] + b[2:]
+
+
+
+# E. Хорош
+# Дана строка.
+# Найдите первое вхождение подстрок 'не' и 'плох'.
+# Если 'плох' идет после 'не' - замените всю подстроку
+# 'не'...'плох' на 'хорош'.
+# Верните получившуюся строку
+# Т.о., 'Этот ужин не так уж плох!' вернет:
+# Этот ужин хорош!
+
+def not_bad(s):
+    not_index = s.find('не')
+    bad_index = s.find('плох')
+    if not_index != -1 and bad_index != -1 and bad_index > not_index:
+        return s[:not_index] + 'хорош' + s[bad_index + 4:]
+    return s
+
+
+
+# F. Две половины
+# Рассмотрим разделение строки на две половины.
+# Если длина четная - обе половины имеют одинаковую длину.
+# Если длина нечетная — дополнительный символ присоединяется к первой половине.
+# Т.е., 'abcde', первая половина 'abc', вторая - 'de'.
+# Даны 2 строки, a и b, верните строку вида:
+# 1-половина-a + 1-половина-b + 2-половина-a + 2-половина-b
+
+def front_back(a, b):
+    def split_str(s):
+        mid = (len(s) + 1) // 2
+        return s[:mid], s[mid:]
+    a_front, a_back = split_str(a)
+    b_front, b_back = split_str(b)
+    return a_front + b_front + a_back + b_back
+
+
+
+
+# Простая функция test() используется в main() для вывода
+# сравнения того, что возвращает с функция с тем, что она должна возвращать.
+def test(got, expected):
+    if got == expected:
+        prefix = ' OK '
+    else:
+        prefix = '  X '
+    print('%s Получено: %s | Ожидалось: %s' % (prefix, repr(got), repr(expected)))
+
+
+# Вызывает фунции выше с тестовыми параметрами.
+def main():
+    print('Пончики')
+    # Каждая строка вызывает donuts() и сравнивает возвращаемое значение с ожидаемым.
+    test(donuts(4), u'Количество пончиков: 4')
+    test(donuts(9), 'Количество пончиков: 9')
+    test(donuts(10), 'Количество пончиков: много')
+    test(donuts(99), 'Количество пончиков: много')
+
+    print()
+    print('Оба конца')
+    test(both_ends('spring'), 'spng')
+    test(both_ends('Hello'), 'Helo')
+    test(both_ends('a'), '')
+    test(both_ends('xyz'), 'xyyz')
+
+    print()
+    print('Кроме первого')
+    test(fix_start('babble'), 'ba**le')
+    test(fix_start('aardvark'), 'a*rdv*rk')
+    test(fix_start('google'), 'goo*le')
+    test(fix_start('donut'), 'donut')
+
+    print()
+    print('Перемешивание')
+    test(mix_up('mix', 'pod'), 'pox mid')
+    test(mix_up('dog', 'dinner'), 'dig donner')
+    test(mix_up('gnash', 'sport'), 'spash gnort')
+    test(mix_up('pezzy', 'firm'), 'fizzy perm')
+
+    print()
+    print('Хорош')
+    test(not_bad('Этот фильм не так уж плох'), 'Этот фильм хорош')
+    test(not_bad('А ужин был не плох!'), 'А ужин был хорош!')
+    test(not_bad('Этот чай уже не горячий'), 'Этот чай уже не горячий')
+    test(not_bad("Этот плох, но не совсем"), "Этот плох, но не совсем")
+
+    print()
+    print('Две половины')
+    test(front_back('abcd', 'xy'), 'abxcdy')
+    test(front_back('abcde', 'xyz'), 'abcxydez')
+    test(front_back('Kitten', 'Donut'), 'KitDontenut')
+
+
+# Стандартный шаблон для вызова функции main().
+if __name__ == '__main__':
+    main()
+#!/usr/bin/python3
+
+"""Имитация текста
+
+Прочитайте файл, указанный в командной строке.
+Используйте str.split() (без аргументов) для получения всех слов в файле.
+Вместо того, чтобы читать файл построчно, проще считать
+его в одну гигантскую строку и применить к нему split() один раз.
+
+Создайте "имитационный" словарь, который связывает каждое слово
+со списком всех слов, которые непосредственно следуют за этим словом в файле.
+Список слов может быть в любом порядке и должен включать дубликаты. 
+
+Так, например, для текста "Привет, мир! Привет, Вселенная!" мы получим такой
+имитационный словарь:
+{'': ['Привет,'], 'Привет,': ['мир!', 'Вселенная!'], 'мир!': ['Привет,']}
+Будем считать, в качестве ключа для первого слова в файле используется пустая строка.
+
+С помощью имитационного словаря довольно просто генерировать случайные тексты, 
+имитирующие оригинальный. Возьмите слово, посмотрите какие слова могут за ним, 
+выберите одно из них наугад, выведите его и используйте это слово 
+в следующей итерации.
+
+Используйте пустую строку в качестве ключа для первого слова.
+Если вы когда-нибудь застрянете на слове, которого нет в словаре,
+вернетесь к пустой строке, чтобы продолжать генерацию текста.
+
+Примечание: стандартный python-модуль random включает в себя метод 
+random.choice(list), который выбирает случайный элемент из непустого списка.
+
+"""
+
+import random
+import sys
+
+def mimic_dict(filename):
+    """Создает имитационный словарь из файла."""
+    try:
+        with open(filename, 'r', encoding='utf-8') as f:
+            content = f.read().strip()
+    except FileNotFoundError:
+        print(f"Файл {filename} не найден")
+        sys.exit(1)
+
+    words = content.split()
+    mimic = {}
+
+    if not words:
+        return mimic
+
+    # Первое слово связано с ключом ''
+    mimic.setdefault('', []).append(words[0])
+
+    # Обрабатываем все слова, кроме последнего
+    for i in range(len(words) - 1):
+        current = words[i]
+        next_word = words[i + 1]
+        mimic.setdefault(current, []).append(next_word)
+
+    return mimic
+
+def print_mimic(mimic_dict, word):
+    """Генерирует 200 слов на основе словаря."""
+    current = word
+    output = []
+    for _ in range(200):
+        # Выбираем следующее слово из возможных вариантов
+        candidates = mimic_dict.get(current, mimic_dict.get('', []))
+        if not candidates:
+            break  # Если вариантов нет, останавливаемся
+        next_word = random.choice(candidates)
+        output.append(next_word)
+        current = next_word
+
+    print(' '.join(output))
+
+def main():
+    if len(sys.argv) != 2:
+        print("Использование: python mimic.py text.txt")
+        sys.exit(1)
+    
+    d = mimic_dict(sys.argv[1])
+    print_mimic(d, '')
+
+if __name__ == '__main__':
+    main()
+
+
+#!/usr/bin/python3
+
+"""Упражнение "Количество слов"
+
+Функция main() ниже уже определена и заполнена. Она вызывает функции 
+print_words() и print_top(), которые вам нужно заполнить.
+
+1. Если при вызове файла задан флаг --count, вызывается функция 
+print_words(filename), которая подсчитывает, как часто каждое слово встречается 
+в тексте и выводит:
+слово1 количество1
+слово2 количество2
+...
+
+Выводимый список отсортируйте в алфавитном порядке. Храните все слова 
+в нижнем регистре, т.о. слова "Слон" и "слон" будут обрабатываться как одно 
+слово.
+
+2. Если задан флаг --topcount, вызывается функция print_top(filename),
+которая аналогична функции print_words(), но выводит только топ-20 наиболее 
+часто встречающихся слов, таким образом первым будет самое часто встречающееся 
+слово, за ним следующее по частоте и т.д.
+
+Используйте str.split() (без аргументов), чтобы разбить текст на слова.
+
+Отсекайте знаки припинания при помощи str.strip() с знаками припинания 
+в качестве аргумента.
+
+Совет: не пишите всю программу сразу. Доведите ее до какого-то промежуточного 
+состояния и выведите вашу текущую структуру данных. Когда все будет работать 
+как надо, перейдите к следующему этапу.
+
+Дополнительно: определите вспомогательную функцию, чтобы избежать дублирования 
+кода внутри print_words() и print_top().
+
+"""
+
+import sys
+import string
+
+def get_word_count(filename):
+    """Возвращает словарь с подсчитанными словами из файла."""
+    word_counts = {}
+    punctuation = string.punctuation
+    with open(filename, 'r') as file:
+        text = file.read()
+    words = text.split()
+    for word in words:
+        processed_word = word.strip(punctuation).lower()
+        if processed_word:
+            word_counts[processed_word] = word_counts.get(processed_word, 0) + 1
+    return word_counts
+
+def print_words(filename):
+    """Выводит слова и их количество в алфавитном порядке."""
+    word_counts = get_word_count(filename)
+    for word in sorted(word_counts):
+        print(f"{word} {word_counts[word]}")
+
+def print_top(filename):
+    """Выводит топ-20 слов по частоте встречаемости."""
+    word_counts = get_word_count(filename)
+    sorted_words = sorted(word_counts.items(), key=lambda x: (-x[1], x[0]))
+    for word, count in sorted_words[:20]:
+        print(f"{word} {count}")
+
+def main():
+    if len(sys.argv) != 3:
+        print('usage: python wordcount.py {--count | --topcount} file')
+        sys.exit(1)
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print(f'unknown option: {option}')
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()
+
+
+
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+"""Имитация текста
+
+Прочитайте файл, указанный в командной строке.
+Используйте str.split() (без аргументов) для получения всех слов в файле.
+Вместо того, чтобы читать файл построчно, проще считать
+его в одну гигантскую строку и применить к нему split() один раз.
+
+Создайте "имитационный" словарь, который связывает каждое слово
+со списком всех слов, которые непосредственно следуют за этим словом в файле.
+Список слов может быть в любом порядке и должен включать дубликаты. 
+
+Так, например, для текста "Привет, мир! Привет, Вселенная!" мы получим такой
+имитационный словарь:
+{'': ['Привет,'], 'Привет,': ['мир!', 'Вселенная!'], 'мир!': ['Привет,']}
+Будем считать, в качестве ключа для первого слова в файле используется пустая строка.
+
+С помощью имитационного словаря довольно просто генерировать случайные тексты, 
+имитирующие оригинальный. Возьмите слово, посмотрите какие слова могут за ним, 
+выберите одно из них наугад, выведите его и используйте это слово 
+в следующей итерации.
+
+Используйте пустую строку в качестве ключа для первого слова.
+Если вы когда-нибудь застрянете на слове, которого нет в словаре,
+вернетесь к пустой строке, чтобы продолжать генерацию текста.
+
+Примечание: стандартный python-модуль random включает в себя метод 
+random.choice(list), который выбирает случайный элемент из непустого списка.
+
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""Имитация текста"""
+
+#!/usr/bin/env python3
+import random
+import sys
+
+def mimic_dict(filename):
+    """Returns a mimic dictionary mapping each word to a list of words that follow it."""
+    try:
+        with open(filename, encoding='utf-8') as f:
+            word_list = f.read().split()
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+        sys.exit(1)
+    except UnicodeDecodeError:
+        print(f"Error: File '{filename}' is not valid UTF-8.")
+        sys.exit(1)
+
+    res = {}
+    prev = ''
+    for x in word_list:
+        if prev in res:
+            res[prev].append(x)
+        else:
+            res[prev] = [x]
+        prev = x
+    return res
+
+def print_mimic(mimic_dict, word):
+    """Prints 200 random words using the mimic dictionary."""
+    res = []
+    for _ in range(200):
+        if word not in mimic_dict:
+            word = ''
+        word = random.choice(mimic_dict[word])
+        res.append(word)
+    print(' '.join(res))  # Fixed: Added parentheses for Python 3
+
+def main():
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} file-to-read")
+        sys.exit(1)
+
+    d = mimic_dict(sys.argv[1])
+    print_mimic(d, '')
+
+if __name__ == '__main__':
+    main()
+
+
+
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+
+"""Упражнение "Количество слов"
+
+Функция main() ниже уже определена и заполнена. Она вызывает функции 
+print_words() и print_top(), которые вам нужно заполнить.
+
+1. Если при вызове файла задан флаг --count, вызывается функция 
+print_words(filename), которая подсчитывает, как часто каждое слово встречается 
+в тексте и выводит:
+слово1 количество1
+слово2 количество2
+...
+
+Выводимый список отсортируйте в алфавитном порядке. Храните все слова 
+в нижнем регистре, т.о. слова "Слон" и "слон" будут обрабатываться как одно 
+слово.
+
+2. Если задан флаг --topcount, вызывается функция print_top(filename),
+которая аналогична функции print_words(), но выводит только топ-20 наиболее 
+часто встречающихся слов, таким образом первым будет самое часто встречающееся 
+слово, за ним следующее по частоте и т.д.
+
+Используйте str.split() (без аргументов), чтобы разбить текст на слова.
+
+Отсекайте знаки припинания при помощи str.strip() с знаками припинания 
+в качестве аргумента.
+
+Совет: не пишите всю программу сразу. Доведите ее до какого-то промежуточного 
+состояния и выведите вашу текущую структуру данных. Когда все будет работать 
+как надо, перейдите к следующему этапу.
+
+Дополнительно: определите вспомогательную функцию, чтобы избежать дублирования 
+кода внутри print_words() и print_top().
+
+"""
+
+#!/usr/bin/env python3
+import sys
+import string
+
+def get_words_dict(filename):
+    """Reads a file and returns a dictionary mapping words to their counts."""
+    try:
+        with open(filename, encoding='utf-8') as f:
+            word_list = f.read().split()
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+        sys.exit(1)
+    except UnicodeDecodeError:
+        print(f"Error: File '{filename}' is not valid UTF-8.")
+        sys.exit(1)
+
+    word_dict = {}
+    strip_chars = string.punctuation + ' \t\n'
+    for word in word_list:
+        word = word.strip(strip_chars).lower()
+        if word:
+            word_dict[word] = word_dict.get(word, 0) + 1
+    return word_dict
+
+def print_words(filename):
+    """Prints all words and their counts in alphabetical order."""
+    word_dict = get_words_dict(filename)
+    if not word_dict:
+        print("No words found in the file.")
+        return
+    for word in sorted(word_dict.keys()):
+        print(f"{word:<20} {word_dict[word]:>5}")
+
+def print_top(filename):
+    """Prints the top 20 most frequent words, sorted by count."""
+    word_dict = get_words_dict(filename)
+    if not word_dict:
+        print("No words found in the file.")
+        return
+    # Sort by count (descending) and then alphabetically for ties
+    top_words = sorted(word_dict.items(), key=lambda x: (-x[1], x[0]))[:20]
+    for word, count in top_words:
+        print(f"{word:<20} {count:>5}")
+
+def main():
+    if len(sys.argv) != 3:
+        print(f"Usage: {sys.argv[0]} {{--count | --topcount}} file")
+        sys.exit(1)
+
+    option = sys.argv[1]
+    filename = sys.argv[2]
+    if option == '--count':
+        print_words(filename)
+    elif option == '--topcount':
+        print_top(filename)
+    else:
+        print(f"Unknown option: {option}")
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()
+
+
+
+ задание 4
+#!/usr/bin/python3
+
+import sys
+import re
+
+"""Упражнение "Детские имена"
+
+ЗАГС г. Москвы ведет статистику детских имен. На сайте этой организации 
+публикуется статистика наиболее популярных имен по году рождения ребенка.
+
+Файлы для этого упражнения находятся в файлах "babynames_boys.html" и 
+"babynames_girls.html". Они содержат сырой HTML-код, подобный тому, 
+что вы можете увидеть на официальном сайте ЗАГСа Москвы по адресу
+http://zags.mos.ru/stat/imena/.
+
+Взгляните на HTML и подумайте о том, как вы можете извлечь данные из него
+при помощи регулярных выражений.
+
+-= 1 часть =-
+
+1. Создайте функцию extract_names(filename), которая принимает в качестве 
+аргумента имя файла и возвращает данные из него в виде словаря вида:
+babynames = {
+'София, Софья': ['3841 (6,0%)*', '3668 (6,2%)', '2127 (4,8%)', 
+    '826 (2,4%)', '193 (0,4%)',],
+'Виктория': ['2219', '1994', '1829', '1076', '1033'],
+...
+}
+Словарь использует в качестве ключа имя ребенка, а в качестве значения -
+список, содержащий количесво детей, названных этим именем в соотв. году.  
+Для упрощения задачи используйте строки в том виде, в котором они содержатся 
+в HTML-файле.
+
+2. Создайте функцию print_names(). Функция получает в качестве аргумента 
+словарь babynames с данными вида ключ/список (описание словаря см. выше). 
+
+Затем:
+
+1. Запрашивает у пользователя интересующий его год (желательно вывести список 
+    возможных вариантов и попросить ввести данные заново, если по указанному 
+    году нет данных).
+
+2. Выводит на печать данные в алфавитном порядке имен:
+    Александра 1683
+    Алина 837
+    Алиса 1239
+    Алёна, Алена 658
+    Амина 243
+    Анастасия 3055 (5,1%)
+    ...
+
+Подсказка: создайте служебный список с годами рождения: 
+years = ['2012', '2010',...].
+С его помощью вам будет проще определять позицию данных по году в списке 
+словаря babynames.
+
+Совет: удобнее всего писать программу, разбивая ее на серию небольших этапов,
+выводя на печать результаты каждого шага. 
+
+Вот некоторые предлагаемые основные этапы:
+
+- Получите текст из файла и выведите его в консоль
+- Сделайте проверку на существование файла. Если файл не существует - 
+    сообщите об ошибке пользователю и завершите программу с флагом 
+    ошибки sys.exit(1)
+- Напишите регулярное выражение, выбирающее данные из таблицы, и выведите 
+    эти данные в консоль в виде сырого списка
+- Обработайте полученный список, удалив из каждой строки лишние пробелы 
+    и символы пореноса строки с помощью метода str.strip() и выведите его в 
+    консоль. (Подсказка: для обработки списков удобно использовать функцию map)
+- Преобразуйте полученные данные в словарь заданной структуры и выведите 
+    его в консоль. Если словарь получен - верните его функцией return и 
+    переходите к опредению функции вывода print_names()
+
+- Напишите функцию, запрашивающую данные у пользователя:
+- Если пользователь ввел символ 'q' - выйдите из программы с кодом успешного 
+    завершения sys.exit(0)
+- Если введеного года нет в служебном списке years - 
+    сообщите пользователю об этом, выведите список созможных вариантов 
+    и завершите программу
+- Если год есть в списке - выведите данные по этому году, сортируя словарь 
+    по имени ребенка
+
+
+-= 2 часть (дополнительная) =-
+
+1. Усложненните функцию extract_names(filename). Пусть теперь она возвращает 
+словарь следующего вида:
+babynames = {
+    'София, Софья': {
+        2012: [3841, 6.0]', 
+        2010: [3668, 6.2]',
+        2005: [2127, 4.8]',
+        2000: [826, 2.4]',
+        1990: [193, 0.4]',
+    },
+    'Виктория': {
+        2012: [2219, None],
+        2010: [1994, None],
+        2005: [1829, None],
+        2000: [1076, None],
+        1990: [1033, None],
+    },
+    ...
+}
+Словарь использует в качестве ключа имя ребенка, а в качестве значения -
+еще один словарь, содержащий список, первый элемент которого содержит 
+количество детей, а второй - данные в процентах, полученные из файла
+(используйте None, если поле таблицы в файле не содержит процентных данных).
+
+2. Функция print_names() работает аналогичным образом, но выдача сортируется
+теперь по кол-ву детей и форматируется следующим образом:
+
+София, Софья    3841   6,0%
+Мария, Марья    3735   5,8%
+...
+Виктория        2219
+Полина          2051
+...
+
+3. Пусть функция print_names() теперь запрашивает данные в цикле,
+чтобы дать пользователю возможность получить выборку за разные годы.
+В конце каждой итерации спрашивайте пользователя, хочет ли он продоожить работу:
+Продолжить? (y/n)
+Если введено 'n' - выйдите из программы.
+"""
+
+#!/usr/bin/env python3
+import sys
+import re
+import os
+
+def extract_names(filename):
+    """
+    Извлекает статистику детских имен из HTML-файла.
+    Возвращает словарь: {имя: {год: [количество, процент], ...}}
+    """
+    # Проверяем, существует ли файл
+    if not os.path.exists(filename):
+        print(f"Ошибка: Файл '{filename}' не найден.")
+        sys.exit(1)
+
+    # Читаем файл в кодировке UTF-8
+    try:
+        with open(filename, encoding='utf-8') as f:
+            html = f.read()
+    except UnicodeDecodeError:
+        print(f"Ошибка: Файл '{filename}' не в формате UTF-8.")
+        sys.exit(1)
+
+    # Список годов, соответствующих столбцам таблицы
+    years = ['2012', '2010', '2005', '2000', '1990']
+
+    # Регулярное выражение для строк таблицы
+    pattern = r'<tr>\s*<td[^>]*>\s*\d+\s*</td>\s*<td[^>]*>\s*([^<]+?)\s*</td>' + \
+              r'\s*(?:<td[^>]*>\s*([^<]+?)\s*</td>\s*){5}\s*</tr>'
+    matches = re.findall(pattern, html, re.DOTALL)
+
+    # Проверяем, найдены ли совпадения
+    if not matches:
+        print("Ошибка: Не удалось извлечь данные из HTML. Проверьте формат файла.")
+        sys.exit(1)
+
+    # Формируем словарь
+    babynames = {}
+    for match in matches:
+        name = match[0].strip()  # Имя (например, "София, Софья")
+        babynames[name] = {}
+        # Обрабатываем данные для каждого года
+        for year, count in zip(years, match[1:]):
+            count = count.strip()
+            # Извлекаем число и процент
+            num_match = re.match(r'(\d+)(?:\s*\(([\d,]+)%\)\*?)?', count)
+            if num_match:
+                num = int(num_match.group(1))
+                percent = num_match.group(2).replace(',', '.') if num_match.group(2) else None
+                babynames[name][year] = [num, percent]
+            else:
+                babynames[name][year] = [int(count), None] if count.isdigit() else [0, None]
+
+    # Отладочный вывод: показываем структуру словаря
+    print("Отладка: Структура словаря babynames:")
+    for name, data in babynames.items():
+        print(f"{name}: {data}")
+    
+    return babynames
+
+def print_names(babynames):
+    """
+    Запрашивает год и выводит статистику имен, отсортированную по количеству.
+    """
+    years = ['2012', '2010', '2005', '2000', '1990']
+
+    while True:
+        # Выводим доступные годы
+        print(f"Доступные годы: {', '.join(years)}")
+        user_input = input("Введите год (или 'q' для выхода): ").strip()
+
+        # Выход при вводе 'q'
+        if user_input.lower() == 'q':
+            print("Программа завершена.")
+            sys.exit(0)
+
+        # Проверяем корректность года
+        if user_input not in years:
+            print(f"Ошибка: '{user_input}' - неверный год. Доступные годы: {', '.join(years)}")
+            continue
+
+        # Проверяем, есть ли данные
+        if not babynames:
+            print("Ошибка: Словарь имен пуст. Проверьте входной файл.")
+            break
+
+        # Собираем данные для года
+        year_data = []
+        for name, data in babynames.items():
+            try:
+                count, percent = data[user_input]
+                if count > 0:
+                    year_data.append((name, count, percent))
+            except KeyError:
+                print(f"Отладка: Год '{user_input}' отсутствует для имени '{name}'.")
+                continue
+
+        # Проверяем, есть ли данные для вывода
+        if not year_data:
+            print(f"Нет данных для года {user_input}.")
+            continue
+
+        # Сортируем по количеству (убывание) и имени (алфавитно)
+        year_data.sort(key=lambda x: (-x[1], x[0]))
+
+        # Выводим результаты
+        print(f"\nИмена за {user_input}:")
+        for name, count, percent in year_data:
+            if percent is not None:
+                print(f"{name:<20} {count:>4}   {percent}%")
+            else:
+                print(f"{name:<20} {count:>4}")
+
+        # Запрашиваем продолжение
+        continue_choice = input("\nПродолжить? (y/n): ").strip().lower()
+        if continue_choice == 'n':
+            print("Программа завершена.")
+            sys.exit(0)
+
+def main():
+    # Проверяем аргументы
+    args = sys.argv[1:]
+    if len(args) != 1:
+        print(f"Использование: {sys.argv[0]} имя_файла")
+        sys.exit(1)
+
+    filename = args[0]
+    babynames = extract_names(filename)
+    print_names(babynames)
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+задание 4.2
+#!/usr/bin/env python3
+import os
+import re
+import sys
+import urllib.request
+import shutil
+
+def read_urls(filename):
+    """
+    Извлекает URL изображений из лог-файла.
+    Возвращает отсортированный список уникальных URL, добавляя имя хоста,
+    извлеченное из имени файла (например, apple-cat.ru_access.log).
+    """
+    # Проверяем, существует ли файл
+    if not os.path.exists(filename):
+        print(f"Ошибка: Файл '{filename}' не найден.")
+        sys.exit(1)
+
+    # Извлекаем имя хоста из имени файла (например, apple-cat.ru из apple-cat.ru_access.log)
+    hostname_match = re.match(r'(.+?)_access\.log$', os.path.basename(filename))
+    if not hostname_match:
+        print(f"Ошибка: Имя файла '{filename}' не соответствует формату '<hostname>_access.log'.")
+        sys.exit(1)
+    hostname = hostname_match.group(1)
+
+    # Регулярное выражение для поиска строк лога с запросами изображений
+    # Ищем строки вида: "GET /images/animals_*.jpg HTTP/1.1"
+    pattern = r'GET\s+(/images/animals_\d+\.jpg)\s+HTTP/1\.1'
+
+    # Множество для хранения уникальных путей изображений
+    image_paths = set()
+
+    # Читаем файл лога
+    try:
+        with open(filename, encoding='utf-8') as f:
+            for line in f:
+                match = re.search(pattern, line)
+                if match:
+                    image_paths.add(match.group(1))
+    except UnicodeDecodeError:
+        print(f"Ошибка: Файл '{filename}' не в формате UTF-8.")
+        sys.exit(1)
+
+    # Проверяем, найдены ли изображения
+    if not image_paths:
+        print("Ошибка: Изображения не найдены в лог-файле.")
+        sys.exit(1)
+
+    # Формируем полные URL, добавляя http://hostname
+    img_urls = [f"http://{hostname}{path}" for path in sorted(image_paths)]
+
+    # Отладочный вывод: показываем найденные URL
+    print("Отладка: Найденные URL изображений:")
+    for url in img_urls:
+        print(url)
+
+    return img_urls
+
+def download_images(img_urls, dest_dir):
+    """
+    Скачивает изображения из списка URL в указанную директорию.
+    Переименовывает файлы в img0.jpg, img1.jpg и т.д.
+    Создает index.html для отображения изображений.
+    """
+    # Проверяем, есть ли URL для скачивания
+    if not img_urls:
+        print("Ошибка: Список URL пуст.")
+        return
+
+    # Создаем директорию, если она не существует
+    try:
+        os.makedirs(dest_dir, exist_ok=True)
+    except OSError as e:
+        print(f"Ошибка: Не удалось создать директорию '{dest_dir}': {e}")
+        sys.exit(1)
+
+    # Скачиваем изображения и переименовываем
+    for i, url in enumerate(img_urls):
+        file_name = os.path.join(dest_dir, f"img{i}.jpg")
+        try:
+            # Скачиваем файл с помощью urllib.request.urlretrieve
+            urllib.request.urlretrieve(url, file_name)
+            print(f"Скачан: {file_name}")
+        except urllib.error.URLError as e:
+            print(f"Ошибка при скачивании {url}: {e}")
+            continue
+
+    # Создаем index.html
+    html_content = "<html>\n<body>\n"
+    for i in range(len(img_urls)):
+        html_content += f'<img src="img{i}.jpg">'
+    html_content += "\n</body>\n</html>"
+
+    # Записываем index.html
+    html_file = os.path.join(dest_dir, "index.html")
+    try:
+        with open(html_file, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        print(f"Создан файл: {html_file}")
+    except OSError as e:
+        print(f"Ошибка при создании {html_file}: {e}")
+        sys.exit(1)
+
+def main():
+    """
+    Обрабатывает аргументы командной строки и вызывает функции для обработки.
+    """
+    args = sys.argv[1:]
+
+    if not args:
+        print('Использование: [--todir dir] logfile')
+        sys.exit(1)
+
+    todir = ''
+    if args[0] == '--todir':
+        if len(args) < 3:
+            print('Ошибка: Укажите директорию и лог-файл после --todir.')
+            sys.exit(1)
+        todir = args[1]
+        logfile = args[2]
+    else:
+        logfile = args[0]
+
+    img_urls = read_urls(logfile)
+
+    if todir:
+        download_images(img_urls, todir)
+    else:
+        print('\n'.join(img_urls))
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+квартира задание 5
+#!/usr/bin/env python3
+import math
+
+class BuildingMaterial:
+    """Базовый класс для строительных материалов."""
+    def __init__(self, area_per_unit, price_per_unit):
+        """Инициализация: площадь на единицу (кв.м) и цена за единицу (руб)."""
+        self.area_per_unit = area_per_unit  # Площадь, покрываемая одной единицей
+        self.price_per_unit = price_per_unit  # Цена за единицу (рулон, банка, упаковка)
+
+    def calculate_units_needed(self, area):
+        """Рассчитывает количество единиц материала для заданной площади."""
+        if area < 0:
+            raise ValueError("Площадь не может быть отрицательной.")
+        return math.ceil(area / self.area_per_unit)  # Округляем вверх
+
+    def calculate_cost(self, area):
+        """Рассчитывает стоимость материала для заданной площади."""
+        units = self.calculate_units_needed(area)
+        return units * self.price_per_unit
+
+class Wallpaper(BuildingMaterial):
+    """Класс для обоев."""
+    def __init__(self, width, length, price_per_roll):
+        """Инициализация: ширина (м), длина рулона (м), цена за рулон (руб)."""
+        area_per_roll = width * length  # Площадь одного рулона
+        super().__init__(area_per_roll, price_per_roll)
+        self.width = width
+        self.length = length
+
+class CeilingPaint(BuildingMaterial):
+    """Класс для потолочной краски."""
+    def __init__(self, weight, coverage_rate, price_per_can):
+        """Инициализация: вес банки (кг), расход (кв.м/кг), цена за банку (руб)."""
+        area_per_can = weight * coverage_rate  # Площадь, покрываемая банкой
+        super().__init__(area_per_can, price_per_can)
+        self.weight = weight
+        self.coverage_rate = coverage_rate
+
+class Laminate(BuildingMaterial):
+    """Класс для ламината."""
+    def __init__(self, board_length, board_width, boards_per_pack, price_per_pack):
+        """Инициализация: длина (м), ширина доски (м), кол-во досок, цена за упаковку."""
+        area_per_pack = board_length * board_width * boards_per_pack  # Площадь упаковки
+        super().__init__(area_per_pack, price_per_pack)
+        self.board_length = board_length
+        self.board_width = board_width
+        self.boards_per_pack = boards_per_pack
+
+class Room:
+    """Класс для комнаты."""
+    def __init__(self, name, width, length, height, window_width, door_width):
+        """Инициализация: имя, ширина, длина, высота (м), ширина окна и двери (м)."""
+        if any(x <= 0 for x in [width, length, height, window_width, door_width]):
+            raise ValueError("Размеры должны быть положительными.")
+        self.name = name
+        self.width = width
+        self.length = length
+        self.height = height
+        self.window_width = window_width
+        self.door_width = door_width
+
+    def calculate_wall_area(self):
+        """Рассчитывает площадь стен для обоев, исключая окно и дверь."""
+        # Периметр комнаты
+        perimeter = 2 * (self.width + self.length)
+        # Площадь всех стен
+        total_wall_area = perimeter * self.height
+        # Вычитаем площади окна и двери (предполагаем стандартную высоту 2 м для двери и окна)
+        window_area = self.window_width * 2  # Высота окна ~2 м
+        door_area = self.door_width * 2     # Высота двери ~2 м
+        return total_wall_area - window_area - door_area
+
+    def calculate_ceiling_area(self):
+        """Рассчитывает площадь потолка."""
+        return self.width * self.length
+
+    def calculate_floor_area(self):
+        """Рассчитывает площадь пола."""
+        return self.width * self.length
+
+    def apply_wallpaper(self, wallpaper):
+        """Рассчитывает стоимость обоев для стен."""
+        area = self.calculate_wall_area()
+        return wallpaper.calculate_cost(area), wallpaper.calculate_units_needed(area)
+
+    def paint_ceiling(self, paint):
+        """Рассчитывает стоимость краски для потолка."""
+        area = self.calculate_ceiling_area()
+        return paint.calculate_cost(area), paint.calculate_units_needed(area)
+
+    def lay_floor(self, laminate):
+        """Рассчитывает стоимость ламината для пола."""
+        area = self.calculate_floor_area()
+        return laminate.calculate_cost(area), laminate.calculate_units_needed(area)
+
+    def calculate_room_estimate(self, wallpaper, paint, laminate):
+        """Рассчитывает смету для комнаты."""
+        wallpaper_cost, wallpaper_units = self.apply_wallpaper(wallpaper)
+        paint_cost, paint_units = self.paint_ceiling(paint)
+        laminate_cost, laminate_units = self.lay_floor(laminate)
+        return {
+            'wallpaper': (wallpaper_cost, wallpaper_units),
+            'paint': (paint_cost, paint_units),
+            'laminate': (laminate_cost, laminate_units),
+            'total': wallpaper_cost + paint_cost + laminate_cost
+        }
+
+class Apartment:
+    """Класс для квартиры."""
+    def __init__(self, rooms=None):
+        """Инициализация: список комнат (может быть пустым)."""
+        self.rooms = rooms if rooms is not None else []
+
+    def add_room(self, room):
+        """Добавляет комнату в квартиру."""
+        if not isinstance(room, Room):
+            raise ValueError("Добавляемый объект должен быть комнатой.")
+        self.rooms.append(room)
+
+    def remove_room(self, room_name):
+        """Удаляет комнату по имени."""
+        self.rooms = [room for room in self.rooms if room.name != room_name]
+
+    def calculate_apartment_estimate(self, wallpaper, paint, laminate):
+        """Рассчитывает общую смету для квартиры."""
+        total_cost = 0
+        estimates = []
+        for room in self.rooms:
+            room_estimate = room.calculate_room_estimate(wallpaper, paint, laminate)
+            estimates.append((room, room_estimate))
+            total_cost += room_estimate['total']
+        return estimates, total_cost
+
+    def print_estimate(self, wallpaper, paint, laminate):
+        """Выводит детализированную смету."""
+        estimates, total_cost = self.calculate_apartment_estimate(wallpaper, paint, laminate)
+        for room, estimate in estimates:
+            print(f"[Комната: {room.name}, ширина: {room.width} м, длина: {room.length} м, высота: {room.height} м]")
+            print(f"Обои        {wallpaper.price_per_unit}x{estimate['wallpaper'][1]}={estimate['wallpaper'][0]} руб.")
+            print(f"Краска      {paint.price_per_unit}x{estimate['paint'][1]}={estimate['paint'][0]} руб.")
+            print(f"Ламинат     {laminate.price_per_unit}x{estimate['laminate'][1]}={estimate['laminate'][0]} руб.")
+        print("---------------------------")
+        print(f"Итого: {total_cost} руб.")
+
+def main():
+    """Создает материалы, комнаты, квартиру и выводит смету."""
+    # Создаем материалы
+    wallpaper = Wallpaper(width=0.53, length=10, price_per_roll=400)  # 0.53x10 м, 400 руб/рулон
+    paint = CeilingPaint(weight=5, coverage_rate=8, price_per_can=1000)  # 5 кг, 8 кв.м/кг, 1000 руб/банка
+    laminate = Laminate(board_length=1.2, board_width=0.2, boards_per_pack=8, price_per_pack=800)  # 1.92 кв.м, 800 руб
+
+    # Создаем комнаты
+    room1 = Room(name="Гостиная", width=3, length=5, height=2.4, window_width=1.5, door_width=0.8)
+    room2 = Room(name="Спальня", width=3, length=4, height=2.4, window_width=1.5, door_width=0.8)
+    kitchen = Room(name="Кухня", width=3, length=3, height=2.4, window_width=1.0, door_width=0.8)
+
+    # Создаем квартиру и добавляем комнаты
+    apartment = Apartment()
+    apartment.add_room(room1)
+    apartment.add_room(room2)
+    apartment.add_room(kitchen)
+
+    # Выводим смету
+    apartment.print_estimate(wallpaper, paint, laminate)
+
+if __name__ == '__main__':
+    main()
+
+
+
+задание 5.2
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import turtle
+import time
+import random
+import math
+
+class Vector:
+    """Класс для представления точки или вектора на плоскости."""
+    def __init__(self, x, y):
+        """Инициализация: координаты x, y."""
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        """Сложение векторов: возвращает новый вектор."""
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        """Вычитание векторов: возвращает новый вектор."""
+        return Vector(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, scalar):
+        """Умножение вектора на число: возвращает новый вектор."""
+        return Vector(self.x * scalar, self.y * scalar)
+
+    def __str__(self):
+        """Строковое представление вектора."""
+        return f"({self.x}, {self.y})"
+
+class Polygon:
+    """Базовый класс для многоугольников."""
+    def __init__(self, center, color, fill=True):
+        """Инициализация: центр (Vector), цвет (строка), заполнение (bool)."""
+        self.center = center
+        self.color = color
+        self.fill = fill  # Заполнять фигуру или только контур
+        self.angle = 0  # Угол поворота в градусах
+        self.vertices = []  # Список вершин (заполняется в наследниках)
+
+    def draw(self, ttl):
+        """Отрисовывает многоугольник с помощью turtle, без лишних линий."""
+        ttl.penup()
+        ttl.color(self.color)
+        if self.fill:
+            ttl.fillcolor(self.color)  # Устанавливаем цвет заливки
+        ttl.setheading(self.angle)  # Устанавливаем угол поворота
+
+        # Вычисляем координаты первой вершины с учетом поворота
+        vertex = self.vertices[0]
+        rotated_x = vertex.x * math.cos(math.radians(self.angle)) - vertex.y * math.sin(math.radians(self.angle))
+        rotated_y = vertex.x * math.sin(math.radians(self.angle)) + vertex.y * math.cos(math.radians(self.angle))
+        start_x = self.center.x + rotated_x
+        start_y = self.center.y + rotated_y
+
+        # Перемещаемся в первую вершину без рисования
+        ttl.setpos(start_x, start_y)
+        ttl.pendown()
+        if self.fill:
+            ttl.begin_fill()  # Начинаем заливку
+
+        # Рисуем все вершины
+        for vertex in self.vertices[1:] + [self.vertices[0]]:  # Замыкаем контур
+            rotated_x = vertex.x * math.cos(math.radians(self.angle)) - vertex.y * math.sin(math.radians(self.angle))
+            rotated_y = vertex.x * math.sin(math.radians(self.angle)) + vertex.y * math.cos(math.radians(self.angle))
+            ttl.goto(self.center.x + rotated_x, self.center.y + rotated_y)
+
+        if self.fill:
+            ttl.end_fill()  # Завершаем заливку
+        ttl.penup()
+
+    def move(self, dx, dy):
+        """Перемещает фигуру на (dx, dy)."""
+        self.center = self.center + Vector(dx, dy)
+
+    def scale(self, factor):
+        """Масштабирует фигуру (увеличивает/уменьшает)."""
+        if factor <= 0:
+            raise ValueError("Коэффициент масштабирования должен быть положительным.")
+        self.vertices = [v * factor for v in self.vertices]
+
+    def rotate(self, angle):
+        """Поворачивает фигуру на заданный угол (градусы)."""
+        self.angle = (self.angle + angle) % 360
+
+class Square(Polygon):
+    """Класс для квадрата, наследуется от Polygon."""
+    def __init__(self, center, width, color, fill=True):
+        """Инициализация: центр (Vector), ширина (м), цвет, заполнение."""
+        super().__init__(center, color, fill)
+        self.width = width
+        # Создаем вершины квадрата относительно центра
+        half_width = width / 2
+        self.vertices = [
+            Vector(-half_width, -half_width),  # Нижний левый
+            Vector(half_width, -half_width),   # Нижний правый
+            Vector(half_width, half_width),    # Верхний правый
+            Vector(-half_width, half_width)    # Верхний левый
+        ]
+
+class Triangle(Polygon):
+    """Класс для правильного треугольника, наследуется от Polygon."""
+    def __init__(self, center, side_length, color, fill=True):
+        """Инициализация: центр (Vector), длина стороны (м), цвет, заполнение."""
+        super().__init__(center, color, fill)
+        self.side_length = side_length
+        # Рассчитываем высоту треугольника: h = (sqrt(3)/2) * side_length
+        height = (math.sqrt(3) / 2) * side_length
+        # Расстояние от центра до вершин (радиус описанной окружности): R = (2/3) * h
+        R = (2 / 3) * height
+        # Создаем вершины треугольника относительно центра
+        self.vertices = [
+            Vector(0, R),                      # Верхняя вершина
+            Vector(-side_length / 2, -R / 2),  # Нижняя левая
+            Vector(side_length / 2, -R / 2)    # Нижняя правая
+        ]
+
+class Circle:
+    """Класс для круга."""
+    def __init__(self, center, radius, color, fill=True):
+        """Инициализация: центр (Vector), радиус (м), цвет, заполнение."""
+        self.center = center
+        self.radius = radius
+        self.color = color
+        self.fill = fill
+
+    def draw(self, ttl):
+        """Отрисовывает круг с помощью turtle, без лишних линий."""
+        ttl.penup()
+        ttl.color(self.color)
+        if self.fill:
+            ttl.fillcolor(self.color)  # Устанавливаем цвет заливки
+        # Перемещаемся в нижнюю точку круга
+        ttl.setpos(self.center.x, self.center.y - self.radius)
+        ttl.pendown()
+        if self.fill:
+            ttl.begin_fill()  # Начинаем заливку
+        ttl.circle(self.radius)
+        if self.fill:
+            ttl.end_fill()  # Завершаем заливку
+        ttl.penup()
+
+    def move(self, dx, dy):
+        """Перемещает круг на (dx, dy)."""
+        self.center = self.center + Vector(dx, dy)
+
+    def scale(self, factor):
+        """Масштабирует круг (увеличивает/уменьшает радиус)."""
+        if factor <= 0:
+            raise ValueError("Коэффициент масштабирования должен быть положительным.")
+        self.radius *= factor
+
+def main():
+    """Создает и анимирует танцевальную сцену с фигурами."""
+    # Настраиваем turtle
+    turtle.tracer(0, 0)  # Отключаем автоматическое обновление экрана
+    turtle.hideturtle()  # Скрываем курсор
+    ttl = turtle.Turtle()  # Создаем черепаху для рисования
+    ttl.hideturtle()  # Скрываем черепаху
+    ttl.speed(0)  # Максимальная скорость рисования
+
+    # Создаем фигуры (все с заполнением)
+    shapes = [
+        Square(Vector(-100, 0), 50, 'red', fill=True),      # Красный квадрат
+        Triangle(Vector(0, 0), 60, 'blue', fill=True),      # Синий треугольник
+        Circle(Vector(100, 0), 30, 'green', fill=True),     # Зеленый круг
+        Square(Vector(-50, 100), 40, 'purple', fill=True),  # Фиолетовый квадрат
+        Circle(Vector(50, -100), 25, 'orange', fill=True)   # Оранжевый круг
+    ]
+
+    # Векторы движения для каждой фигуры (случайные направления)
+    velocities = [Vector(random.uniform(-5, 5), random.uniform(-5, 5)) for _ in shapes]
+
+    # Анимация
+    try:
+        while True:
+            ttl.clear()  # Очищаем экран
+            for i, shape in enumerate(shapes):
+                # Перемещаем фигуру
+                shape.move(velocities[i].x, velocities[i].y)
+                # Проверяем границы экрана (-300, 300) и отражаем движение
+                if not -300 < shape.center.x < 300:
+                    velocities[i].x = -velocities[i].x
+                if not -300 < shape.center.y < 300:
+                    velocities[i].y = -velocities[i].y
+                # Случайное масштабирование (с вероятностью 10%)
+                if random.random() < 0.1:
+                    shape.scale(random.uniform(0.9, 1.1))
+                # Случайный поворот для многоугольников (с вероятностью 10%)
+                if isinstance(shape, Polygon) and random.random() < 0.1:
+                    shape.rotate(random.uniform(-15, 15))
+                # Отрисовываем фигуру
+                shape.draw(ttl)
+            turtle.update()  # Обновляем экран
+            time.sleep(0.1)  # Задержка для анимации
+    except KeyboardInterrupt:
+        print("Анимация остановлена.")
+        turtle.bye()  # Закрываем окно
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+задание 6
+
+#!/usr/bin/env python3
+import random
+
+class Card:
+    """Класс для карточки лото."""
+    def __init__(self):
+        """Инициализация: генерирует карточку 3x9 с 15 уникальными числами."""
+        # Выбираем 15 уникальных чисел от 1 до 90
+        numbers = random.sample(range(1, 91), 15)
+        # Распределяем числа по 3 строкам (по 5 чисел в каждой)
+        self.grid = []
+        numbers.sort()  # Сортируем для упрощения распределения
+        for i in range(3):
+            # Берем 5 чисел для строки
+            row_numbers = numbers[i*5:(i+1)*5]
+            # Создаем строку из 9 клеток, размещая числа в случайных позициях
+            row = ['  '] * 9  # Пустые клетки обозначены пробелами
+            positions = random.sample(range(9), 5)  # 5 случайных позиций
+            for num, pos in zip(row_numbers, sorted(positions)):
+                row[pos] = f"{num:2}"  # Форматируем число как строку (2 символа)
+            self.grid.append(row)
+        self.numbers_left = 15  # Количество оставшихся чисел
+
+    def has_number(self, number):
+        """Проверяет, есть ли число на карточке."""
+        for row in self.grid:
+            if f"{number:2}" in row:
+                return True
+        return False
+
+    def cross_number(self, number):
+        """Зачеркивает число на карточке, если оно есть."""
+        for row in self.grid:
+            for i, cell in enumerate(row):
+                if cell == f"{number:2}":
+                    row[i] = '--'  # Зачеркиваем число
+                    self.numbers_left -= 1
+                    return True
+        return False
+
+    def is_winner(self):
+        """Проверяет, все ли числа зачеркнуты."""
+        return self.numbers_left == 0
+
+    def __str__(self):
+        """Возвращает строковое представление карточки."""
+        result = []
+        result.append('-' * 26)
+        for row in self.grid:
+            result.append(' '.join(row))
+        result.append('-' * 26)
+        return '\n'.join(result)
+
+class BarrelGenerator:
+    """Класс для генерации бочонков."""
+    def __init__(self):
+        """Инициализация: создает список из 90 бочонков."""
+        self.barrels = list(range(1, 91))
+        random.shuffle(self.barrels)  # Перемешиваем
+        self.current = 0  # Индекс следующего бочонка
+
+    def next_barrel(self):
+        """Возвращает следующий бочонок или None, если закончились."""
+        if self.current < len(self.barrels):
+            barrel = self.barrels[self.current]
+            self.current += 1
+            return barrel
+        return None
+
+    def remaining(self):
+        """Возвращает количество оставшихся бочонков."""
+        return len(self.barrels) - self.current
+
+class Game:
+    """Класс для управления игрой в лото."""
+    def __init__(self):
+        """Инициализация: создает карточки и генератор бочонков."""
+        self.player_card = Card()
+        self.computer_card = Card()
+        self.barrel_gen = BarrelGenerator()
+
+    def play(self):
+        """Запускает игровой цикл."""
+        while True:
+            # Получаем новый бочонок
+            barrel = self.barrel_gen.next_barrel()
+            if barrel is None:
+                print("Бочонки закончились! Ничья.")
+                break
+
+            # Выводим состояние игры
+            print(f"\nНовый бочонок: {barrel} (осталось {self.barrel_gen.remaining()})")
+            print("------ Ваша карточка -----")
+            print(self.player_card)
+            print("-- Карточка компьютера ---")
+            print(self.computer_card)
+
+            # Ход игрока
+            action = input("Зачеркнуть цифру? (y/n): ").strip().lower()
+            player_has_number = self.player_card.has_number(barrel)
+            if action == 'y':
+                if player_has_number:
+                    self.player_card.cross_number(barrel)
+                else:
+                    print("Цифры нет на вашей карточке. Вы проиграли!")
+                    break
+            else:  # Продолжить
+                if player_has_number:
+                    print("Цифра есть на вашей карточке. Вы проиграли!")
+                    break
+
+            # Ход компьютера (автоматический)
+            if self.computer_card.has_number(barrel):
+                self.computer_card.cross_number(barrel)
+
+            # Проверка на победу
+            if self.player_card.is_winner():
+                print("Поздравляем! Вы победили!")
+                break
+            if self.computer_card.is_winner():
+                print("Компьютер победил!")
+                break
+
+def main():
+    """Запускает игру."""
+    print("Добро пожаловать в игру Лото!")
+    game = Game()
+    game.play()
+    print("Игра завершена.")
+
+if __name__ == '__main__':
+    main()
+
+
+
+задание 7
+
+
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import os
+import sqlite3
+import requests
+import json
+import sys
+from collections import OrderedDict
+
+def create_database():
+    """Создает базу данных SQLite с таблицей weather."""
+    try:
+        conn = sqlite3.connect('weather.db')
+        cursor = conn.cursor()
+        cursor.execute('''CREATE TABLE IF NOT EXISTS weather
+                         (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          city VARCHAR(255),
+                          date DATE,
+                          day_temp INTEGER,
+                          night_temp INTEGER,
+                          UNIQUE(city, date))''')
+        conn.commit()
+        return conn
+    except sqlite3.Error as e:
+        print(f"Ошибка при создании базы данных: {e}")
+        sys.exit(1)
+
+def get_cities():
+    """Возвращает статический список городов (замена cities.xml)."""
+    # Тестовый список городов с координатами
+    return OrderedDict([
+        ('Россия', [
+            {'name': 'Москва', 'id': '213', 'lat': 55.75396, 'lon': 37.620393},
+            {'name': 'Санкт-Петербург', 'id': '2', 'lat': 59.93863, 'lon': 30.31413}
+        ]),
+        ('Украина', [
+            {'name': 'Киев', 'id': '123', 'lat': 50.4501, 'lon': 30.5234}
+        ])
+    ])
+
+def select_country(countries):
+    """Запрашивает выбор страны."""
+    print("\nДоступные страны:")
+    for i, country in enumerate(countries.keys(), 1):
+        print(f"{i}. {country}")
+    while True:
+        try:
+            choice = input("\nВведите номер страны (или 'q' для выхода): ").strip()
+            if choice.lower() == 'q':
+                print("Программа завершена.")
+                sys.exit(0)
+            choice = int(choice)
+            if 1 <= choice <= len(countries):
+                return list(countries.keys())[choice - 1]
+            print(f"Ошибка: Введите число от 1 до {len(countries)}.")
+        except ValueError:
+            print("Ошибка: Введите число или 'q'.")
+
+def fetch_forecast(city, api_key):
+    """Получает прогноз погоды через API."""
+    url = f"https://api.weather.yandex.ru/v2/informers?lat={city['lat']}&lon={city['lon']}"
+    headers = {'X-Yandex-API-Key': api_key}
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Ошибка при получении прогноза для {city['name']}: {e}")
+        return None
+
+def parse_forecast(data, city_name, conn):
+    """Парсит JSON прогноз и обновляет базу."""
+    if not data or 'forecasts' not in data:
+        return
+    cursor = conn.cursor()
+    for day in data['forecasts']:
+        date = day['date']
+        day_temp = day.get('parts', {}).get('day_short', {}).get('temp')
+        night_temp = day.get('parts', {}).get('night_short', {}).get('temp')
+        if day_temp is not None or night_temp is not None:
+            try:
+                cursor.execute('''INSERT INTO weather (city, date, day_temp, night_temp)
+                                 VALUES (?, ?, ?, ?)
+                                 ON CONFLICT(city, date) DO UPDATE
+                                 SET day_temp = excluded.day_temp,
+                                     night_temp = excluded.night_temp''',
+                              (city_name, date, day_temp, night_temp))
+                conn.commit()
+                print(f"Обновлены данные для {city_name} на {date}")
+            except sqlite3.Error as e:
+                print(f"Ошибка при записи в базу для {city_name} на {date}: {e}")
+
+def main():
+    """Основная функция."""
+    # Замените на ваш API-ключ
+    API_KEY = 'ваш_api_ключ'
+    if not API_KEY:
+        print("Ошибка: Укажите API-ключ в переменной API_KEY.")
+        sys.exit(1)
+
+    conn = create_database()
+    try:
+        countries = get_cities()
+        selected_country = select_country(countries)
+        print(f"\nВыбрана страна: {selected_country}")
+        for city in countries[selected_country]:
+            print(f"\nОбработка города: {city['name']} (ID: {city['id']})")
+            data = fetch_forecast(city, API_KEY)
+            if data:
+                parse_forecast(data, city['name'], conn)
+    except KeyboardInterrupt:
+        print("\nПрограмма прервана пользователем.")
+        sys.exit(0)
+    finally:
+        conn.close()
+        print("Соединение с базой данных закрыто.")
+
+if __name__ == '__main__':
+    main()
